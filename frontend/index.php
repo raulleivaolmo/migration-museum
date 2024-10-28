@@ -111,6 +111,12 @@ include "db_conn.php";
                 }
                 ?>
             </div>
+            <!-- Search touch keyboard -->
+            <div class="container-fluid">
+                <i class="fas fa-times" id="container-fluid-close"></i><br/>
+                <div class="softkeys" data-target="input[name='search-input']"></div>
+            </div>
+
             <!-- Write your story -->
             <div id="write-cta">
                 <div class="qr-cta">Write Your Story and Leave a Legacy</div>
@@ -134,10 +140,7 @@ include "db_conn.php";
                     </div>
                 </div>
             </div>
-            <div class="container-fluid">
-                <i class="fas fa-times" id="container-fluid-close"></i><br/>
-                <div class="softkeys" data-target="input[name='search-input']"></div>
-            </div>
+
         </div>
         <div class="container-story">
             <h2>Share Your Story</h2><i class="fas fa-times"></i>

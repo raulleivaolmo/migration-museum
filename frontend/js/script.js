@@ -1,6 +1,6 @@
 // attract screen
 document.getElementById('attract-screen').addEventListener('click', function() {
-    attractor=0;
+    attractor = 0;
     this.style.display = 'none';
 
 });
@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // If 'search' parameter is not present, show the attract screen and make it clickable
         var attractScreen = document.getElementById('attract-screen');
         attractScreen.style.display = 'flex'; // Make sure it's visible if it was hidden by default
-         attractor=1;
+        attractor = 1;
         attractScreen.addEventListener('click', function() {
             this.style.display = 'none';
-             $('#search-inst').addClass('search-inst-animate');
-             $('#write-cta').addClass('write-cta-animate');
-             $('#search-circle').css('margin-left', '0px');
-             $('#search-container').css('margin-left', '25px');
+            $('#search-inst').addClass('search-inst-animate');
+            $('#write-cta').addClass('write-cta-animate');
+            $('#search-circle').css('margin-left', '0px');
+            $('#search-container').css('margin-left', '25px');
 
 
 
@@ -24,36 +24,60 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         // If 'search' parameter is present, hide the attract screen immediately
         document.getElementById('attract-screen').style.display = 'none';
-        attractor=0;
+        attractor = 0;
     }
 });
 
 document.getElementById('attract-screen').addEventListener('click', function() {
-    attractor=0;
+    attractor = 0;
     this.style.display = 'none';
 
 });
 
+// clickable buttons and UI behaviours/animations
+
+$(document).ready(function() {
+
+
+    $('#write-cta').on('touchstart click', function(event) {
+        $('#qr-container').css('top', '280px');
+    });
+
+    $('#qr-container').on('touchstart click', function(event) {
+        $('#qr-container').css('top', '1200px');
+    });
+
+    $('.qr-container_right').on('touchstart click', function(event) {
+        $('.container-story').css('display', 'block');
+    });
+
+    $('.container-story .fas').on('touchstart click', function(event) {
+        $('.container-story').css('display', 'none');
+    });
+
+});
+
+
 // Initialize Swiper framework
 
-    var swiper = new Swiper(".mySwiper", {
+var swiper = new Swiper(".mySwiper", {
 
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-       initialSlide: 1,
-      slidesPerView: "auto",
-      coverflowEffect: {
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    initialSlide: 1,
+    slidesPerView: "auto",
+    coverflowEffect: {
         rotate: 50,
         stretch: 0,
         depth: 100,
         modifier: 1,
         slideShadows: true,
-      },
-      pagination: {
+    },
+    pagination: {
         el: ".swiper-pagination",
-      }
-    });
+    }
+});
 
 
 function initializeSoftkeys(target) {
@@ -153,14 +177,14 @@ $(document).ready(function() {
 
 // allows to search for a query
 
-        document.querySelector('.softkeys').addEventListener('click', function() {
+document.querySelector('.softkeys').addEventListener('click', function() {
 
-        var searchText = document.getElementById('search-input').value;
+    var searchText = document.getElementById('search-input').value;
     var suggestionsContainer = document.getElementById('suggestions-container');
     if (searchText.length > 2) {
         // Create a new XMLHttpRequest
         var xhr = new XMLHttpRequest();
-          sendDataToServer(sessionCode, 'search ' + encodeURIComponent(searchText));
+        sendDataToServer(sessionCode, 'search ' + encodeURIComponent(searchText));
         xhr.open('GET', 'search_suggestions.php?query=' + encodeURIComponent(searchText), true);
         xhr.onload = function() {
             if (this.status == 200) {
@@ -173,25 +197,25 @@ $(document).ready(function() {
         suggestionsContainer.style.display = 'none';
     }
 
-    });
+});
 
 
 
 // Shows the touch keyboard when click on Search button
 document.querySelector('#search-button').addEventListener('click', function() {
-     $('#search-inst').css('display', 'none');
-     $('#search-input').css('opacity', '1');
-     $('.container-fluid').css('top', '745px');
-     document.getElementById('search-input').value="";
+    $('#search-inst').css('display', 'none');
+    $('#search-input').css('opacity', '1');
+    $('.container-fluid').css('top', '345px');
+    document.getElementById('search-input').value = "";
 });
 
 // Closes touch keyboard
 $('#container-fluid-close').on('touchstart click', function(event) {
-     $('.container-fluid').css('top', '1200px');
-     document.getElementById('search-input').value="";
-     var suggestionsContainer = document.getElementById('suggestions-container');
-        suggestionsContainer.innerHTML = "";
-                suggestionsContainer.style.display = 'block';
+    $('.container-fluid').css('top', '1200px');
+    document.getElementById('search-input').value = "";
+    var suggestionsContainer = document.getElementById('suggestions-container');
+    suggestionsContainer.innerHTML = "";
+    suggestionsContainer.style.display = 'block';
 });
 
 
@@ -205,9 +229,9 @@ $(document).ready(function() {
         console.log('works');
         var storyId = $(this).data('story-id'); // Getting the story ID from data attribute
         var currentButton = $(this); // 'this' refers to the .like-container that was clicked
-    var keywords = $(this).data('story-keywords');
+        var keywords = $(this).data('story-keywords');
 
-    // Check if the button is already disabled
+        // Check if the button is already disabled
         if (currentButton.css('background-color') === 'rgb(204, 204, 204)') { // 'rgb(204, 204, 204)' is the RGB representation of '#cccccc'
             // If it is already disabled, change the background color to black
             currentButton.css('background-color', 'black');
@@ -219,7 +243,9 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             url: 'like_story.php',
-            data: { storyId: storyId },
+            data: {
+                storyId: storyId
+            },
             success: function(response) {
                 console.log('Like updated successfully');
 
@@ -233,7 +259,9 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "store_keywords.php", // PHP script to handle storing keywords in session
-            data: { keywords: keywords },
+            data: {
+                keywords: keywords
+            },
             success: function(response) {
                 console.log('Keywords stored in session:', response);
             }
@@ -242,33 +270,31 @@ $(document).ready(function() {
 });
 
 
-
-
-
 // Timer for inactivity
 let inactivityTimer;
-var attractor=1;
+var attractor = 1;
+
 function resetInactivityTimer() {
     clearTimeout(inactivityTimer); // Clear the current inactivity timer
     // Set a new timer
 
-    if (attractor==0){
-    inactivityTimer = setTimeout(function() {
-        sendDataToServer(sessionCode, 'inactivity');
-        document.getElementById('inactivity-overlay').style.display = 'flex'; // Show the overlay
-        // Set another timer for the "YES" button
-        setTimeout(function() {
-            if (document.getElementById('inactivity-overlay').style.display === 'flex') {
-                sendDataToServer(sessionCode, 'inactivity timeout');
-                // Get the current URL without the query string
-var currentUrlWithoutQueryString = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    if (attractor == 0) {
+        inactivityTimer = setTimeout(function() {
+            sendDataToServer(sessionCode, 'inactivity');
+            document.getElementById('inactivity-overlay').style.display = 'flex'; // Show the overlay
+            // Set another timer for the "YES" button
+            setTimeout(function() {
+                if (document.getElementById('inactivity-overlay').style.display === 'flex') {
+                    sendDataToServer(sessionCode, 'inactivity timeout');
+                    // Get the current URL without the query string
+                    var currentUrlWithoutQueryString = window.location.protocol + "//" + window.location.host + window.location.pathname;
 
-// Redirect the browser to the URL without the query string
-window.location.href = currentUrlWithoutQueryString;
-            }
-        }, 30000); // 30 seconds to press YES
-    }, 60000); // 30 seconds of inactivity
-}
+                    // Redirect the browser to the URL without the query string
+                    window.location.href = currentUrlWithoutQueryString;
+                }
+            }, 30000); // 30 seconds to press YES
+        }, 60000); // 30 seconds of inactivity
+    }
 }
 
 // Reset the timer on various events
@@ -291,29 +317,29 @@ resetInactivityTimer();
 
 
 // Set the timeout duration in milliseconds (3 minutes = 180000 ms)
-        const timeoutDuration = 180000;
-        let timeout;
+const timeoutDuration = 180000;
+let timeout;
 
-        // Function to reload the page
-        const reloadPage = () => {
-            location.reload();
-        };
+// Function to reload the page
+const reloadPage = () => {
+    location.reload();
+};
 
-        // Function to reset the timeout
-        const resetTimeout = () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(reloadPage, timeoutDuration);
-        };
+// Function to reset the timeout
+const resetTimeout = () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(reloadPage, timeoutDuration);
+};
 
-        // Function to stop the timeout
-        const stopTimeout = () => {
-            clearTimeout(timeout);
-        };
+// Function to stop the timeout
+const stopTimeout = () => {
+    clearTimeout(timeout);
+};
 
 
-        // Event listeners to stop the timeout on touch or click
-        window.addEventListener('touchstart', stopTimeout);
-        window.addEventListener('click', stopTimeout);
+// Event listeners to stop the timeout on touch or click
+window.addEventListener('touchstart', stopTimeout);
+window.addEventListener('click', stopTimeout);
 
-        // Initialize the timeout
-        resetTimeout();
+// Initialize the timeout
+resetTimeout();
