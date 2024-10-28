@@ -1,3 +1,7 @@
+<?php
+session_start();
+include "db_conn.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -43,18 +47,61 @@
         <!-- Swiper -->
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
+ <?php
+        $likeinstr=1;
+        $initialLoadLimit = 10;
+         $sql = "SELECT *  FROM `stories` WHERE `Exhibition` = 'Disc' AND  `reviewed` = 1";
+  // $sql = "SELECT *  FROM `stories` WHERE `Exhibition` = 'Disc' AND  `reviewed` = 1 AND `Disc_Type` NOT LIKE 'What would you like to see in our Migration Museum'";
+if (!empty($_GET['search'])){
+  $sql = $sql." AND `Story` LIKE '%".$_GET['search']."%'";
+}
+
+$sql = $sql." ORDER BY RAND() DESC LIMIT ?";
 
 
-                <div class="swiper-slide circle-container" style="background-color: #;">
-                    <div class="title"><span></span></div>
-                    <div class="body-text"  style="font-size:;"><span></span></div>
-                    <div class="author"></div>
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $initialLoadLimit);
+$stmt->execute();
+$result = $stmt->get_result();
 
-                    <div class="like-cta" >Like</div>
-                    <button class="like-container" id="like-container" data-story-id="" data-story-keywords=""><span class="like-icon"> <i class="fas fa-heart"></i> </span></button>
-                </div>
+        // Fetch and display results
+        while ($row = mysqli_fetch_assoc($result)) {
+          ?>
+      <?php
+// Define the variable with a value (this value should come from somewhere in your application)
+$familyMigrationStatus = $row["Disc_Type"]; // Example value
 
-            </div>
+// Map migration statuses to background colors
+$backgroundColors = [
+    'I migrated here' => 'a3b4c7',
+    'At least one of my parents migrated here' => 'e6a655',
+    'At least one of my grandparents migrated here' => 'b5a6cd',
+    'No known migrants in my family' => '82cfd1',
+    'Someone in my family emigrated from here' => 'e8d26f',
+    'What would you like to see in our Migration Museum' => 'a4d4b2',
+];
+
+// Determine the background color based on the migration status
+$backgroundColor = isset($backgroundColors[$familyMigrationStatus]) ? $backgroundColors[$familyMigrationStatus] : 'ffffff'; // Default color is white
+
+        $text = $row['Story'];
+        $textLength = strlen($text);
+        $fontSize = $textLength > 400 ? '18px' : '20px';
+        ?>
+      <div class="swiper-slide circle-container" style="background-color: #<?php echo $backgroundColor; ?>;">
+            <div class="title"><span><?php echo $row["Disc_Type"] ?></span></div>
+            <div class="body-text"  style="font-size:<?php echo $fontSize; ?>;"><span><?php echo $row["Story"]; ?></span></div>
+            <div class="author"><?php echo $row["Name_of_ppt"] ?></div>
+
+            <div class="like-cta" >Like</div>
+
+            <button class="like-container" id="like-container" data-story-id="<?php echo $row["id"] ?>" data-story-keywords="<?php echo $row["Keywords"] ?>"><span class="like-icon"> <i class="fas fa-heart"></i> </span></button>
+      </div>
+      <?php
+
+        }
+        ?>
+
 
         </div>
         <div id="write-cta">
@@ -128,5 +175,5 @@
         <div class="softkeys2" data-target="textarea[name='story']"></div>
 
     </body>
-
+<script src="js/script.js"></script>
 </html>
