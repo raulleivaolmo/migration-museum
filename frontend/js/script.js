@@ -184,7 +184,6 @@ document.querySelector('.softkeys').addEventListener('click', function() {
     if (searchText.length > 2) {
         // Create a new XMLHttpRequest
         var xhr = new XMLHttpRequest();
-        sendDataToServer(sessionCode, 'search ' + encodeURIComponent(searchText));
         xhr.open('GET', 'search_suggestions.php?query=' + encodeURIComponent(searchText), true);
         xhr.onload = function() {
             if (this.status == 200) {
